@@ -6,8 +6,9 @@
 //  Copyright (c) 2013 Aditya Narayan. All rights reserved.
 //
 
-#import "webViewController.h"
+#import "detailViewController.h"
 #import "ProductViewController.h"
+
 
 
 
@@ -161,61 +162,63 @@
 {
     
 //     Create the next view controller.
-    webViewController *detailViewController = [[webViewController alloc] init];
+    
+    detailViewController *webviewController = [[detailViewController alloc] init];
     if ([self.title  isEqual: @"Apple mobile devices"]) {
         
         if (indexPath.row ==0) {
-            [detailViewController uploadWebPage:@"http://www.apple.com/ipad/"];
+            [webviewController uploadWebPage:@"http://www.apple.com/ipad/"];
         
         }
         if (indexPath.row ==1) {
-            [detailViewController uploadWebPage:@"http://www.apple.com/ipod/"];
+            [webviewController uploadWebPage:@"http://www.apple.com/ipod/"];
         }
         if (indexPath.row==2) {
-          [detailViewController uploadWebPage:@"http://www.apple.com/iphone/"];
+          [webviewController uploadWebPage:@"http://www.apple.com/iphone/"];
         }
         
     }else if ([self.title isEqual:@"Samsung mobile devices"]){
         if (indexPath.row==0) {
-            [detailViewController uploadWebPage:@"http://www.samsung.com/us/explore/galaxy-note-5-features-and-specs/?cid=ppc-"];
+            [webviewController uploadWebPage:@"http://www.samsung.com/us/explore/galaxy-note-5-features-and-specs/?cid=ppc-"];
         }
         if (indexPath.row==1) {
-            [detailViewController uploadWebPage:@"http://www.samsung.com/global/microsite/galaxynote/note/index.html?type=find"];
+            [webviewController uploadWebPage:@"http://www.samsung.com/global/microsite/galaxynote/note/index.html?type=find"];
         }
         if (indexPath.row==2) {
-            [detailViewController uploadWebPage:@"http://www.samsung.com/global/microsite/galaxytab/10.1/index.html"];
+            [webviewController uploadWebPage:@"http://www.samsung.com/global/microsite/galaxytab/10.1/index.html"];
         }
         
     }
     
     else if ([self.title isEqual:@"Google mobile devices"]){
         if (indexPath.row==0) {
-            [detailViewController uploadWebPage:@"https://store.google.com/product/nexus_6p"];
+            [webviewController uploadWebPage:@"https://store.google.com/product/nexus_6p"];
         }
         if (indexPath.row ==1) {
-            [detailViewController uploadWebPage:@"https://www.google.com/nexus/5x/"];
+            [webviewController uploadWebPage:@"https://www.google.com/nexus/5x/"];
         }
         if (indexPath.row ==2) {
-            [detailViewController uploadWebPage:@"https://store.google.com/product/nexus_4?sku=nexus_4_16gb"];
+            [webviewController uploadWebPage:@"https://store.google.com/product/nexus_4?sku=nexus_4_16gb"];
         }
     
     }else{
         
         if (indexPath.row ==0) {
-            [detailViewController uploadWebPage:@"https://www.microsoft.com/en/mobile/phones/lumia/?order_by=Latest"];
+            [webviewController uploadWebPage:@"https://www.microsoft.com/en/mobile/phones/lumia/?order_by=Latest"];
         }
         if (indexPath.row ==1) {
-            [detailViewController uploadWebPage:@"https://en.wikipedia.org/wiki/Destroyer"];
+            [webviewController uploadWebPage:@"https://en.wikipedia.org/wiki/Destroyer"];
         }
         if (indexPath.row==2) {
-            [detailViewController uploadWebPage:@"http://www.universetoday.com/22285/facts-about-the-milky-way/"];
+            [webviewController uploadWebPage:@"http://www.universetoday.com/22285/facts-about-the-milky-way/"];
         }
     
     }
     
 
         //     Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    [self.navigationController pushViewController:webviewController animated:YES];
+    
 }
  
 
