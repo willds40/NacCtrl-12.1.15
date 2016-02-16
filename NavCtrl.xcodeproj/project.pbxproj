@@ -39,8 +39,8 @@
 		BEAF55B71C7385840005E86A /* NavControllerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAF55B61C7385840005E86A /* NavControllerAppDelegate.m */; };
 		BEAF55BB1C7386040005E86A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEAF55BA1C7386040005E86A /* Images.xcassets */; };
 		BEAF55BD1C7386160005E86A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAF55BC1C7386160005E86A /* main.m */; };
-		BEAF55C21C7388350005E86A /* detailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAF55C01C7388350005E86A /* detailViewController.m */; };
-		BEAF55C31C7388350005E86A /* detailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAF55C11C7388350005E86A /* detailViewController.xib */; };
+		BEAF55C21C7388350005E86A /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAF55C01C7388350005E86A /* DetailViewController.m */; };
+		BEAF55C31C7388350005E86A /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAF55C11C7388350005E86A /* DetailViewController.xib */; };
 		BEB31B2C1C6E41F300EAB978 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB31B2B1C6E41F300EAB978 /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -91,9 +91,9 @@
 		BEAF55B61C7385840005E86A /* NavControllerAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavControllerAppDelegate.m; sourceTree = "<group>"; };
 		BEAF55BA1C7386040005E86A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = SOURCE_ROOT; };
 		BEAF55BC1C7386160005E86A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		BEAF55BF1C7388350005E86A /* detailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailViewController.h; sourceTree = "<group>"; };
-		BEAF55C01C7388350005E86A /* detailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailViewController.m; sourceTree = "<group>"; };
-		BEAF55C11C7388350005E86A /* detailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = detailViewController.xib; sourceTree = "<group>"; };
+		BEAF55BF1C7388350005E86A /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		BEAF55C01C7388350005E86A /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DetailViewController.m; path = NavCtrl/DetailViewController.m; sourceTree = "<group>"; };
+		BEAF55C11C7388350005E86A /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DetailViewController.xib; path = NavCtrl/DetailViewController.xib; sourceTree = "<group>"; };
 		BEB31B2B1C6E41F300EAB978 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -146,9 +146,7 @@
 			children = (
 				BEAF55871C73836D0005E86A /* ProductViewController.h */,
 				BEAF55881C73836D0005E86A /* ProductViewController.m */,
-				BEAF55BF1C7388350005E86A /* detailViewController.h */,
-				BEAF55C01C7388350005E86A /* detailViewController.m */,
-				BEAF55C11C7388350005E86A /* detailViewController.xib */,
+				BEAF55BF1C7388350005E86A /* DetailViewController.h */,
 			);
 			name = ProductViewController;
 			sourceTree = "<group>";
@@ -156,6 +154,7 @@
 		48A656A818163BF200746D36 = {
 			isa = PBXGroup;
 			children = (
+				BEF5A3B21C738FF4000D6F70 /* DetailViewController */,
 				48A656BA18163BF200746D36 /* NavCtrl */,
 				48A656D318163BF200746D36 /* NavCtrlTests */,
 				48A656B318163BF200746D36 /* Frameworks */,
@@ -256,6 +255,15 @@
 			name = "New Group";
 			sourceTree = "<group>";
 		};
+		BEF5A3B21C738FF4000D6F70 /* DetailViewController */ = {
+			isa = PBXGroup;
+			children = (
+				BEAF55C01C7388350005E86A /* DetailViewController.m */,
+				BEAF55C11C7388350005E86A /* DetailViewController.xib */,
+			);
+			name = DetailViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -350,7 +358,7 @@
 				BEAF55A61C73839C0005E86A /* ipod.jpg in Resources */,
 				BEAF55A31C73839C0005E86A /* google.jpg in Resources */,
 				BEAF55A11C73839C0005E86A /* galaxys4.jpg in Resources */,
-				BEAF55C31C7388350005E86A /* detailViewController.xib in Resources */,
+				BEAF55C31C7388350005E86A /* DetailViewController.xib in Resources */,
 				BEAF55A51C73839C0005E86A /* iphone.jpg in Resources */,
 				BEAF55A01C73839C0005E86A /* galaxynote.png in Resources */,
 			);
@@ -374,7 +382,7 @@
 				BEAF55851C7383560005E86A /* CompanyViewController.m in Sources */,
 				BEAF55891C73836D0005E86A /* ProductViewController.m in Sources */,
 				BEAF55BD1C7386160005E86A /* main.m in Sources */,
-				BEAF55C21C7388350005E86A /* detailViewController.m in Sources */,
+				BEAF55C21C7388350005E86A /* DetailViewController.m in Sources */,
 				BEAF55B71C7385840005E86A /* NavControllerAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
