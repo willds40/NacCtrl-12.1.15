@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
+#import "Products.h"
 
 
 @interface detailViewController : UIViewController
+@property (strong, retain) Products *currentProduct; 
 
--(void)uploadWebPage:(NSString *)url; 
 @end

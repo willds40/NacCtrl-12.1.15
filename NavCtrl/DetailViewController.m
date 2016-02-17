@@ -16,20 +16,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:theConfiguration];
+    NSString *url = self.currentProduct.url;
+       NSURL *nsurl=[NSURL URLWithString:url];
+    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
+        [webView loadRequest:nsrequest];
+       [self.view addSubview:webView];
+    
+    
    
 }
 
--(void)uploadWebPage:(NSString *)url{
-
-WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:theConfiguration];
-    NSURL *nsurl=[NSURL URLWithString:url];
-    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
-    [webView loadRequest:nsrequest];
-    [self.view addSubview:webView];
-
-
-}
+//-(void)uploadWebPage:(NSString *)url{
+//
+//WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
+//    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:theConfiguration];
+//    NSURL *nsurl=[NSURL URLWithString:url];
+//    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
+//    [webView loadRequest:nsrequest];
+//    [self.view addSubview:webView];
+//
+//
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
