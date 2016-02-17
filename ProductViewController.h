@@ -8,13 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "CompanyViewController.h"
+#import "DAO.h"
 @class detailViewController;
 
 @interface ProductViewController : UITableViewController
-@property (nonatomic, retain) NSArray *products;
-@property (nonatomic, retain) NSArray *logoProductList;
-@property(nonatomic, retain)NSString *currentCompanyString;
+//@property (nonatomic, retain) NSArray *products;
+//@property (nonatomic, retain) NSArray *logoProductList;
+//@property(nonatomic, retain)NSString *currentCompanyString;
 @property (nonatomic, retain) Company *currentCompany;
-
-
 @end

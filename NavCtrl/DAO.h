@@ -16,6 +16,8 @@
 @property (nonatomic, retain) NSMutableArray *companyList;
 @property (nonatomic, retain) NSArray *products;
 @property (strong, retain) Products *currentProduct;
+@property (nonatomic, retain) NSMutableArray *logoList; //creating an array of logos
+
 
 +(DAO *)sharedDao;
 -(void)uploadCompanies;

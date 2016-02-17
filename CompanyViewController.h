@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Company.h"
+#import "DAO.h"
 
 @class ProductViewController;
 
@@ -15,6 +16,7 @@
 @property (nonatomic,retain)NSMutableArray *currentCompany;
 @property (nonatomic, retain) NSMutableArray *companyList;
 @property (nonatomic, retain) NSMutableArray *logoList; //creating an array of logos
+@property (nonatomic, strong)DAO *dao; 
 
 @property (nonatomic, retain) IBOutlet  ProductViewController * productViewController;
 
