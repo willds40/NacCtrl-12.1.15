@@ -8,9 +8,7 @@
 
 #import "detailViewController.h"
 #import "ProductViewController.h"
-
-
-
+#import "EditproductViewController.h"
 
 @interface ProductViewController ()
 
@@ -31,6 +29,21 @@
 {
     [super viewDidLoad];
     
+    UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]
+                                          initWithTarget:self action:@selector(handleLongPress:)];
+    lpgr.minimumPressDuration = 2.0; //seconds
+    [self.tableView addGestureRecognizer:lpgr];
+    [lpgr release];
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self
+               action:@selector(pushToProductViewEditor)
+     forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:@"AddCompany" forState:UIControlStateNormal];
+    button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
+    button.backgroundColor = [UIColor blueColor];
+    [self.view addSubview:button];
+    
 
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -39,46 +52,52 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+-(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{    //push to the companyeditview controller
+    
+    CGPoint p = [gestureRecognizer locationInView:self.tableView];
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
+    if (indexPath == nil) {
+        NSLog(@"long press on table view but not on a row");
+    }
+    else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+               NSLog(@"long press on table view at row %d", indexPath.row);
+
+    
+    EditproductViewController *productEdit = [[EditproductViewController alloc]init];
+    Products *prod = self.currentCompany.products[indexPath.row];
+        productEdit.productPassedIn = prod; 
+    
+    productEdit.productNameString = prod.name;
+    productEdit.logoString = prod.logo;
+    productEdit.webLinkString = prod.url;
+    
+    
+    [self.navigationController pushViewController:productEdit animated:YES];
+    
+    }
+    
+}
+
+
+-(void)pushToProductViewEditor{
+    
+//    [DAO sharedDao].indexPathRow = self.indexPathRow; 
+    EditproductViewController *productEdit = [[EditproductViewController alloc]init];
+    productEdit.productsArray = self.currentCompany.products; 
+    
+    
+    [self.navigationController pushViewController:productEdit animated:YES];
+    
+    
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
     
-     
-    
-//    if ([self.currentCompanyString isEqualToString:@"Apple mobile devices"]) {
-//        self.products = @[@"iPad", @"iPod Touch",@"iPhone"];
-//        self.logoProductList =[NSArray arrayWithObjects:
-//        [UIImage imageNamed:@"ipad.jpg"],
-//        [UIImage imageNamed:@"ipod.jpg"],
-//        [UIImage imageNamed:@"iphone.jpg"],
-//        nil];
-//
-//    } else if ([self.currentCompanyString isEqualToString:@"Samsung mobile devices"]){
-//        self.products = @[@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab"];
-//        
-//        self.logoProductList =[NSArray arrayWithObjects:
-//        [UIImage imageNamed:@"galaxys4.jpg"],
-//        [UIImage imageNamed:@"galaxynote.png"],
-//        [UIImage imageNamed:@"galaxytab.png"],
-//        nil];
-//    }else if ([self.currentCompanyString isEqualToString:@"Google mobile devices"]){
-//        self.products = @[@"Nexus 6P", @"Nexus S", @"Nexus 4"];
-//        self.logoProductList =[NSArray arrayWithObjects:
-//        [UIImage imageNamed:@"nexus6p.jpg"],
-//        [UIImage imageNamed:@"nuxus5.jpg"],
-//        [UIImage imageNamed:@"nexus4.png"],
-//        nil];
-//    
-//    }else if ([self.currentCompanyString isEqualToString:@"Windows mobile devices"]){
-//        self.products = @[@"Windows Luma", @"Windows Destroyer", @"Windows Milky Way"];
-//        self.logoProductList =[NSArray arrayWithObjects:
-//        [UIImage imageNamed:@"windowsluma.jpg"],
-//        [UIImage imageNamed:@"destroyer.gif"],
-//        [UIImage imageNamed:@"milkyway.jpg"],
-//        nil];
-//    
-//    }
-  [self.tableView reloadData];
+     [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -93,14 +112,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return [self.currentCompany.products count];
 }
@@ -116,7 +133,6 @@
     cell.textLabel.text = [[self.currentCompany.products objectAtIndex:[indexPath row] ]name];
     cell.imageView.image = [UIImage imageNamed:[[self.currentCompany.products objectAtIndex:[indexPath row]]logo]];
 
-    
     return cell;
 }
 
@@ -133,13 +149,8 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    
+ 
 }
 */
 
@@ -165,72 +176,15 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
 //     Create the next view controller.
     
    detailViewController *webviewController = [[detailViewController alloc] init];
 
-    
-    
-    
-//    if ([self.title  isEqual: @"Apple mobile devices"]) {
-//
-//        if (indexPath.row ==0) {
-//            [webviewController uploadWebPage:@"http://www.apple.com/ipad/"];
-//        
-//        }
-//        if (indexPath.row ==1) {
-//            [webviewController uploadWebPage:@"http://www.apple.com/ipod/"];
-//        }
-//        if (indexPath.row==2) {
-//          [webviewController uploadWebPage:@"http://www.apple.com/iphone/"];
-//        }
-//        
-//    }else if ([self.title isEqual:@"Samsung mobile devices"]){
-//        if (indexPath.row==0) {
-//            [webviewController uploadWebPage:@"http://www.samsung.com/us/explore/galaxy-note-5-features-and-specs/?cid=ppc-"];
-//        }
-//        if (indexPath.row==1) {
-//            [webviewController uploadWebPage:@"http://www.samsung.com/global/microsite/galaxynote/note/index.html?type=find"];
-//        }
-//        if (indexPath.row==2) {
-//            [webviewController uploadWebPage:@"http://www.samsung.com/global/microsite/galaxytab/10.1/index.html"];
-//        }
-//        
-//    }
-//    
-//    else if ([self.title isEqual:@"Google mobile devices"]){
-//        if (indexPath.row==0) {
-//            [webviewController uploadWebPage:@"https://store.google.com/product/nexus_6p"];
-//        }
-//        if (indexPath.row ==1) {
-//            [webviewController uploadWebPage:@"https://www.google.com/nexus/5x/"];
-//        }
-//        if (indexPath.row ==2) {
-//            [webviewController uploadWebPage:@"https://store.google.com/product/nexus_4?sku=nexus_4_16gb"];
-//        }
-//    
-//    }else{
-//        
-//        if (indexPath.row ==0) {
-//            [webviewController uploadWebPage:@"https://www.microsoft.com/en/mobile/phones/lumia/?order_by=Latest"];
-//        }
-//        if (indexPath.row ==1) {
-//            [webviewController uploadWebPage:@"https://en.wikipedia.org/wiki/Destroyer"];
-//        }
-//        if (indexPath.row==2) {
-//            [webviewController uploadWebPage:@"http://www.universetoday.com/22285/facts-about-the-milky-way/"];
-//        }
-//    
-//    }
-//    
-webviewController.currentProduct = self.currentCompany.products[indexPath.row];
+
+                        webviewController.currentProduct = self.currentCompany.products[indexPath.row];
     
        //     Push the view controller.
-    [self.navigationController pushViewController:webviewController animated:YES];
+        [self.navigationController pushViewController:webviewController animated:YES];
     
 }
- 
-
-
 @end

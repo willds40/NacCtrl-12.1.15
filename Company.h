@@ -16,4 +16,7 @@
 
 -(instancetype)initWithName:(NSString *)name andLogo: (NSString *)logo;
 
+-(instancetype)initWithName:(NSString *)name andLogoURL: (NSString *)logo;
+
+
 @end

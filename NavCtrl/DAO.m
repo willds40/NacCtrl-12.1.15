@@ -38,7 +38,7 @@ Company *Windows = [[Company alloc]initWithName:@"Windows Mobile Devices" andLog
 Company *Google = [[Company alloc]initWithName:@"Google Mobile Devices" andLogo:@"google.jpg"];
 
 
-  self.companyList = [[NSMutableArray alloc]initWithObjects:Apple,Samsung,Windows,Google, nil];
+  
 
 Products *ipad = [[Products alloc]initWithName:@"iPad" andlogo:@"ipad.jpg" andurl:@"http://www.apple.com/ipad/"];
 Products *ipod = [[Products alloc]initWithName:@"iPod Touch" andlogo:@"ipod.jpg" andurl:@"http://www.apple.com/ipod/"];
@@ -63,10 +63,30 @@ Samsung.products =[[NSMutableArray alloc] initWithObjects:galaaxyS4,galaxyNote,g
 Windows.products =[[NSMutableArray alloc]initWithObjects:windowsLuma,destroyer, milkyWay, nil];
 Google.products = [[NSMutableArray alloc]initWithObjects:nexus6p,nexus5, nexus4, nil];
 
+self.companyList = [[NSMutableArray alloc]initWithObjects:Apple,Samsung,Windows,Google, nil];
+}
 
-
+-(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo{
+    
+    Company *newCompany = [[Company alloc]initWithName:companyName andLogo:logo];
+    
+    [self.companyList addObject:newCompany];
     
 }
-  
+-(void)createNewProduct:(NSString*)prdouctName andlogo: (NSString*)logo andUrl: (NSString *)url{
+    
+    self.anotherProduct = [[Products alloc]initWithName:prdouctName andlogo:logo andurl:url];
+}
+-(void)editCompanyName: (NSString *)names andlogo: (NSString *)logo androw: (NSInteger) indexPathRow{
+
+    self.indexPathRow = indexPathRow;
+    
+    [self.companyList[self.indexPathRow]setName:names];
+    [self.companyList[self.indexPathRow]setLogo:logo];
+}
+-(void)editProductName:(NSString *)names andlogo: (NSString *)logo andUrl: (NSString*) url{
+    
+
+}
 
 @end

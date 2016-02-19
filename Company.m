@@ -19,6 +19,17 @@ self = [super init];
 
 
 }
+-(instancetype)initWithName:(NSString *)name andLogoURL: (NSString *)logo{
+    self = [super init];
+    
+    self.name = name;
+    
+    
+    self.logo = logo;
+    ;
+    return self;
 
+
+}
 
 @end

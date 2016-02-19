@@ -10,10 +10,9 @@
 #import "CompanyViewController.h"
 #import "DAO.h"
 @class detailViewController;
+@class ProductViewController;
 
 @interface ProductViewController : UITableViewController
-//@property (nonatomic, retain) NSArray *products;
-//@property (nonatomic, retain) NSArray *logoProductList;
-//@property(nonatomic, retain)NSString *currentCompanyString;
 @property (nonatomic, retain) Company *currentCompany;
+-(void)pushToProductViewEditor;
 @end
