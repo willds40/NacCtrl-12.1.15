@@ -20,12 +20,14 @@
 @property (nonatomic, retain) NSMutableArray *logoList; //creating an array of logos
 @property (nonatomic) NSUInteger indexPathRow;
 @property (nonatomic, strong)Products *anotherProduct;
+@property (nonatomic, strong) NSMutableArray *arrayOfStockPrices;
 
 
 +(DAO *)sharedDao;
 -(void)uploadCompanies;
--(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo;
+-(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockPrice;
 -(void)createNewProduct:(NSString*)prdouctName andlogo: (NSString*)logo andUrl: (NSString *)url;
 -(void)editCompanyName: (NSString *)name andlogo: (NSString *)logo androw: (NSInteger) indexPathRow;
 -(void)editProductName:(NSString *)names andlogo: (NSString *)logo andUrl: (NSString*) url;
+//-(void)UpdateStockPrice;
 @end

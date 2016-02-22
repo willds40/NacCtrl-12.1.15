@@ -9,27 +9,28 @@
 #import "Company.h"
 
 @implementation Company
--(instancetype)initWithName:(NSString *)name andLogo: (NSString *)logo{
+-(instancetype)initWithName:(NSString *)name andLogo: (NSString *)logo andStockCodes:(NSString *)stockCodes {
 self = [super init];
     
     self.name = name;
     self.logo = logo;
+    self.stockCodes = stockCodes;
     
     return self;
 
 
 }
--(instancetype)initWithName:(NSString *)name andLogoURL: (NSString *)logo{
-    self = [super init];
-    
-    self.name = name;
-    
-    
-    self.logo = logo;
-    ;
-    return self;
+//-(instancetype)initWithName:(NSString *)name andLogoURL: (NSString *)logo andStockPrice: (NSString *)stockPrice{
+//    self = [super init];
+//    
+//    self.name = name;
+//    
+//    self.logo = logo;
+//    self.stockprice = stockPrice;
+//    ;
+//    return self;
+//
 
-
-}
+//}
 
 @end

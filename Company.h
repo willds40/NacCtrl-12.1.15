@@ -13,10 +13,11 @@
 @property (strong, nonatomic)NSMutableArray *products;
 @property (strong, nonatomic)NSString * name;
 @property (strong, nonatomic)NSString * logo;
+@property (strong, nonatomic)NSString * stockCodes;
+@property (nonatomic, strong)NSString *stockPrice; 
 
--(instancetype)initWithName:(NSString *)name andLogo: (NSString *)logo;
+-(instancetype)initWithName:(NSString *)name andLogo: (NSString *)logo andStockCodes: (NSString *)stockCodes;
 
--(instancetype)initWithName:(NSString *)name andLogoURL: (NSString *)logo;
 
 
 @end

@@ -31,11 +31,11 @@
 -(void)uploadCompanies{
 
 
-Company *Apple =[[Company alloc]initWithName:@"Apple Mobile Devices" andLogo:@"apple.png"];
-Company *Samsung = [[Company alloc]initWithName:@"Samsung Mobile Devices" andLogo:@"samsung.jpeg"];
+Company *Apple =[[Company alloc]initWithName:@"Apple Mobile Devices" andLogo:@"apple.png"andStockCodes:@"AAPL"];
+Company *Samsung = [[Company alloc]initWithName:@"Samsung Mobile Devices" andLogo:@"samsung.jpeg" andStockCodes:@"SSNLF"];
 
-Company *Windows = [[Company alloc]initWithName:@"Windows Mobile Devices" andLogo:@"windows.png"];
-Company *Google = [[Company alloc]initWithName:@"Google Mobile Devices" andLogo:@"google.jpg"];
+Company *Windows = [[Company alloc]initWithName:@"Windows Mobile Devices" andLogo:@"windows.png"andStockCodes:@"MSFT"];
+Company *Google = [[Company alloc]initWithName:@"Google Mobile Devices" andLogo:@"google.jpg"andStockCodes:@"GOOG"];
 
 
   
@@ -64,11 +64,20 @@ Windows.products =[[NSMutableArray alloc]initWithObjects:windowsLuma,destroyer, 
 Google.products = [[NSMutableArray alloc]initWithObjects:nexus6p,nexus5, nexus4, nil];
 
 self.companyList = [[NSMutableArray alloc]initWithObjects:Apple,Samsung,Windows,Google, nil];
-}
+   }
 
--(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo{
+//-(void)UpdateStockPrice{
+//    for (int i =0; i< [self.companyList count]; i++) {
+//        [self.companyList[i]setStockPrice:self.arrayOfStockPrices[i]];
+//        
+//    }
+//
+//}
+
+-(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockCodes{
     
-    Company *newCompany = [[Company alloc]initWithName:companyName andLogo:logo];
+    NSString *stockCodess = @"temp var";
+    Company *newCompany = [[Company alloc]initWithName:companyName andLogo:logo andStockCodes:stockCodess];
     
     [self.companyList addObject:newCompany];
     
@@ -85,7 +94,6 @@ self.companyList = [[NSMutableArray alloc]initWithObjects:Apple,Samsung,Windows,
     [self.companyList[self.indexPathRow]setLogo:logo];
 }
 -(void)editProductName:(NSString *)names andlogo: (NSString *)logo andUrl: (NSString*) url{
-    
 
 }
 

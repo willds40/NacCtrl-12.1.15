@@ -31,8 +31,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-   self.dao = [DAO sharedDao];
+    
+    self.dao = [DAO sharedDao];
     
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
@@ -43,10 +43,10 @@
     self.navigationItem.leftBarButtonItem = addButton;
     [addButton release];
     
-
+    
     // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
- 
+    self.clearsSelectionOnViewWillAppear = NO;
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
@@ -57,7 +57,52 @@
     [self.tableView addGestureRecognizer:lpgr];
     [lpgr release];
     
-
+    
+    
+    
+    
+}
+-(void)runNSURLSession{
+    
+    NSMutableArray *stockPriceArray = [[NSMutableArray alloc]init];
+    for (Company *company in self.dao.companyList) {
+        [stockPriceArray addObject:company.stockCodes];
+    }
+    
+    
+    NSString *stockURL = [NSString stringWithFormat:@"https://finance.yahoo.com/d/quotes.csv?s=%@&f=l1",[stockPriceArray componentsJoinedByString:@"+" ]];
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithURL:[NSURL URLWithString:stockURL]
+            completionHandler:^(NSData *data,
+                                NSURLResponse *response,
+                                NSError *error) {
+                // handle response
+                NSString *stockQuoteStrings = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+                NSLog(@"%@", stockQuoteStrings);
+                NSUInteger index = 0;
+                for (NSString *stockPrice in [stockQuoteStrings componentsSeparatedByString:@"\n"]) {
+                    
+                    if (index == self.dao.companyList.count) break;
+                    [[self.dao.companyList objectAtIndex:index]setStockPrice:stockPrice];
+                    index++;
+                }
+                
+                
+//                alternative way of doing it. This calls a makes a nsmutable array and then calls a method in the DAO
+                
+                //                self.dao.arrayOfStockPrices = (NSMutableArray *)[stockQuoteStrings componentsSeparatedByString:@"\n"];//NSMutableArray was a string, but we typecasted it to make it a mutable array.
+                //                [self.dao.arrayOfStockPrices removeLastObject];
+                //                NSLog(@" %@", self.dao.arrayOfStockPrices);
+                //                [self.dao UpdateStockPrice];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                });
+                
+                
+                
+            }] resume];
+    
+    
     
     
 }
@@ -65,7 +110,9 @@
     [super viewWillAppear:animated];
     [self.tableView reloadData]; // to reload selected cell
     //create a gesture that passes to the editcompanyviewcontroller
-
+    
+    [self runNSURLSession];
+    
 }
 
 
@@ -81,20 +128,20 @@
     else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         
         NSLog(@"long press on table view at row %ld", (long)indexPath.row);
-    
-    
-    CompanyEditViewController *companyEdit = [[CompanyEditViewController alloc]init];
-    Company * comp = self.dao.companyList[indexPath.row];
-    
-    
-    companyEdit.companyName = comp.name;
-    companyEdit.logoName = comp.logo;
-    
-        companyEdit.indexPathRow = indexPath.row; 
         
-    [self.navigationController pushViewController:companyEdit animated:YES];
+        
+        CompanyEditViewController *companyEdit = [[CompanyEditViewController alloc]init];
+        Company * comp = self.dao.companyList[indexPath.row];
+        
+        
+        companyEdit.companyName = comp.name;
+        companyEdit.logoName = comp.logo;
+        
+        companyEdit.indexPathRow = indexPath.row;
+        
+        [self.navigationController pushViewController:companyEdit animated:YES];
     }
-
+    
 }
 
 -(void)addCompany{
@@ -127,13 +174,14 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
     
     cell.textLabel.text = [[self.dao.companyList objectAtIndex:[indexPath row]] name];
     cell.imageView.image = [UIImage imageNamed:[[self.dao.companyList objectAtIndex:[indexPath row]]logo]];
+    cell.detailTextLabel.text =[[self.dao.companyList objectAtIndex:[indexPath row]] stockPrice];
     
     return cell;
 }
@@ -150,18 +198,18 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-//         Delete the row from the data source
+        //         Delete the row from the data source
         [self.dao.companyList removeObjectAtIndex:indexPath.row];
         [self.dao.logoList removeObjectAtIndex:indexPath.row];
         [self.dao.currentCompany removeObjectAtIndex:indexPath.row];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
+    }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
-//         Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        //         Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }
     [self.tableView reloadData];
-
+    
 }
 
 // Override to support rearranging the table view.
@@ -198,8 +246,8 @@
     NSLog(@"Selected Comp Name %@", comp.name);
     
     [self.navigationController
-        pushViewController:self.productViewController
-        animated:YES];
+     pushViewController:self.productViewController
+     animated:YES];
 }
 
 @end

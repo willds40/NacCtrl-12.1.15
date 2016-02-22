@@ -14,6 +14,8 @@
 @class CompanyEditViewController;
 
 @interface CompanyViewController : UITableViewController
+//<NSURLSessionDelegate, NSURLSessionDownloadDelegate>
+
 @property (nonatomic,retain)NSMutableArray *currentCompany;
 @property (nonatomic, retain) NSMutableArray *companyList;
 @property (nonatomic, retain) NSMutableArray *logoList; //creating an array of logos
