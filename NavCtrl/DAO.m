@@ -76,8 +76,8 @@ self.companyList = [[NSMutableArray alloc]initWithObjects:Apple,Samsung,Windows,
 
 -(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockCodes{
     
-    NSString *stockCodess = @"temp var";
-    Company *newCompany = [[Company alloc]initWithName:companyName andLogo:logo andStockCodes:stockCodess];
+   
+    Company *newCompany = [[Company alloc]initWithName:companyName andLogo:logo andStockCodes:stockCodes];
     
     [self.companyList addObject:newCompany];
     
@@ -86,12 +86,13 @@ self.companyList = [[NSMutableArray alloc]initWithObjects:Apple,Samsung,Windows,
     
     self.anotherProduct = [[Products alloc]initWithName:prdouctName andlogo:logo andurl:url];
 }
--(void)editCompanyName: (NSString *)names andlogo: (NSString *)logo androw: (NSInteger) indexPathRow{
+-(void)editCompanyName: (NSString *)names andlogo: (NSString *)logo androw: (NSInteger) indexPathRow andStockSymbol: (NSString *)stockSymbol{
 
     self.indexPathRow = indexPathRow;
     
     [self.companyList[self.indexPathRow]setName:names];
     [self.companyList[self.indexPathRow]setLogo:logo];
+    [self.companyList[self.indexPathRow]setStockCodes:stockSymbol];
 }
 -(void)editProductName:(NSString *)names andlogo: (NSString *)logo andUrl: (NSString*) url{
 

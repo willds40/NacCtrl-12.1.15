@@ -27,7 +27,7 @@
 -(void)uploadCompanies;
 -(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockPrice;
 -(void)createNewProduct:(NSString*)prdouctName andlogo: (NSString*)logo andUrl: (NSString *)url;
--(void)editCompanyName: (NSString *)name andlogo: (NSString *)logo androw: (NSInteger) indexPathRow;
+-(void)editCompanyName: (NSString *)names andlogo: (NSString *)logo androw: (NSInteger) indexPathRow andStockSymbol: (NSString *)stockSymbol;
 -(void)editProductName:(NSString *)names andlogo: (NSString *)logo andUrl: (NSString*) url;
 //-(void)UpdateStockPrice;
 @end

@@ -52,13 +52,14 @@
     [_companyImageEdit release];
     [_submitButtonOutlet release];
     [_saveButtonOutlet release];
+    [_stockSymbolAdd release];
     [super dealloc];
 }
 - (IBAction)submitButton:(id)sender {
 
     
     [[DAO sharedDao] createNewCompany:self.companyEdit.text
-                              andlogo:self.companyImageEdit.text];
+                              andlogo:self.companyImageEdit.text andstockCodes:self.stockSymbolAdd.text];
     
  
     
@@ -68,7 +69,7 @@
 
 - (IBAction)saveButton:(id)sender {
     
-    [[DAO sharedDao]editCompanyName:self.companyEdit.text andlogo:self.companyImageEdit.text androw:self.indexPathRow];
+    [[DAO sharedDao]editCompanyName:self.companyEdit.text andlogo:self.companyImageEdit.text androw:self.indexPathRow andStockSymbol:self.stockSymbolAdd.text];
     [self.navigationController popToRootViewControllerAnimated:YES];
 
     

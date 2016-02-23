@@ -13,6 +13,8 @@
 @interface CompanyEditViewController : UIViewController
 @property (retain, nonatomic) IBOutlet UITextField *companyEdit;
 @property (retain, nonatomic) IBOutlet UITextField *companyImageEdit;
+@property (retain, nonatomic) IBOutlet UITextField *stockSymbolAdd;
+
 @property (strong, nonatomic) NSString *companyName;
 @property (strong, nonatomic)NSString *logoName;
 - (IBAction)submitButton:(id)sender;
