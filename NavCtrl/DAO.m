@@ -7,6 +7,16 @@
 //
 
 #import "DAO.h"
+#import <sqlite3.h>
+@interface DAO()
+@property (nonatomic, strong) NSString *documentsDirectory;
+@property (nonatomic, strong) NSString *databaseFilename;
+@property (nonatomic, strong) NSMutableArray *arrResults;
+-(void)runQuery:(const char *)query isQueryExecutable:(BOOL)queryExecutable;
+
+-(void)copyDatabaseIntoDocumentsDirectory;
+@end
+
 
 @implementation DAO
 
@@ -18,84 +28,252 @@
 
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
-        _sharedInstance = [[DAO alloc] init];
-        
+        _sharedInstance = [[DAO alloc] initWithDatabaseFilename:@"stock.db"];
         [_sharedInstance uploadCompanies];
     });
+    
     return _sharedInstance;
 }
 
+#pragma mark create And Edit Methods
 
-
-
+-(instancetype)initWithDatabaseFilename:(NSString *)dbFilename{
+    self = [super init];
+    if (self) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        self.documentsDirectory = [paths objectAtIndex:0];
+        
+        // Keep the database filename.
+        self.databaseFilename = dbFilename;
+        // Copy the database file into the documents directory if necessary.
+        [self copyDatabaseIntoDocumentsDirectory];
+    }
+    return self;
+}
+-(void)copyDatabaseIntoDocumentsDirectory{
+    // Check if the database file exists in the documents directory.
+    NSString *destinationPath = [self.documentsDirectory stringByAppendingPathComponent:self.databaseFilename];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:destinationPath]) {
+        // The database file does not exist in the documents directory, so copy it from the main bundle now.
+        NSString *sourcePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:self.databaseFilename];
+        NSError *error;
+        [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:&error];
+        
+        // Check if any error occurred during copying and display it.
+        if (error != nil) {
+            NSLog(@"%@", [error localizedDescription]);
+        }
+    }
+}
+-(void)runQuery:(const char *)query isQueryExecutable:(BOOL)queryExecutable{
+    // Create a sqlite object.
+    sqlite3 *sqlite3Database;
+    
+    // Set the database file path.
+    self.databasePath = [self.documentsDirectory stringByAppendingPathComponent:self.databaseFilename];
+    
+    // Initialize the results array.
+    if (self.arrResults != nil) {
+        [self.arrResults removeAllObjects];
+        self.arrResults = nil;
+    }
+    self.arrResults = [[NSMutableArray alloc] init];
+    
+    // Initialize the column names array.
+    if (self.arrColumnNames != nil) {
+        [self.arrColumnNames removeAllObjects];
+        self.arrColumnNames = nil;
+    }
+    self.arrColumnNames = [[NSMutableArray alloc] init];
+    
+    // Open the database.
+    BOOL openDatabaseResult = sqlite3_open([self.databasePath UTF8String], &sqlite3Database);
+    if(openDatabaseResult == SQLITE_OK){
+        // Declare a sqlite3_stmt object in which will be stored the query after having been compiled into a SQLite statement.
+        sqlite3_stmt *compiledStatement;
+        
+        // Load all data from database to memory.
+        BOOL prepareStatementResult = sqlite3_prepare_v2(sqlite3Database, query, -1, &compiledStatement, NULL);
+        if(prepareStatementResult == SQLITE_OK) {
+            if (!queryExecutable){
+                // In this case data must be loaded from the database.
+                
+                // Declare an array to keep the data for each fetched row.
+                NSMutableArray *arrDataRow;
+                
+                // Loop through the results and add them to the results array row by row.
+                while(sqlite3_step(compiledStatement) == SQLITE_ROW) {
+                    // Initialize the mutable array that will contain the data of a fetched row.
+                    arrDataRow = [[NSMutableArray alloc] init];
+                    
+                    // Get the total number of columns.
+                    int totalColumns = sqlite3_column_count(compiledStatement);
+                    
+                    // Go through all columns and fetch each column data.
+                    for (int i=0; i<totalColumns; i++){
+                        // Convert the column data to text (characters).
+                        char *dbDataAsChars = (char *)sqlite3_column_text(compiledStatement, i);
+                        
+                        // If there are contents in the currenct column (field) then add them to the current row array.
+                        if (dbDataAsChars != NULL) {
+                            // Convert the characters to string.
+                            [arrDataRow addObject:[NSString  stringWithUTF8String:dbDataAsChars]];
+                        }
+                        
+                        // Keep the current column name.
+                        if (self.arrColumnNames.count != totalColumns) {
+                            dbDataAsChars = (char *)sqlite3_column_name(compiledStatement, i);
+                            [self.arrColumnNames addObject:[NSString stringWithUTF8String:dbDataAsChars]];
+                        }
+                    }
+                    
+                    // Store each fetched data row in the results array, but first check if there is actually data.
+                    if (arrDataRow.count > 0) {
+                        NSLog(@"%@", arrDataRow);
+                        [self.arrResults addObject:arrDataRow];
+                    }
+                }
+            }else {
+                // This is the case of an executable query (insert, update, ...).
+                
+                // Execute the query.
+                NSInteger executeQueryResults = sqlite3_step(compiledStatement);
+                if (executeQueryResults == SQLITE_DONE) {
+                    // Keep the affected rows.
+                    self.affectedRows = sqlite3_changes(sqlite3Database);
+                    
+                    // Keep the last inserted row ID.
+                    self.lastInsertedRowID = sqlite3_last_insert_rowid(sqlite3Database);
+                }
+                else {
+                    // If could not execute the query show the error message on the debugger.
+                    NSLog(@"DB Error: %s", sqlite3_errmsg(sqlite3Database));
+                }
+            }
+        }else {
+            // In the database cannot be opened then show the error message on the debugger.
+            NSLog(@"%s", sqlite3_errmsg(sqlite3Database));
+        }
+        
+        // Release the compiled statement from memory.
+        sqlite3_finalize(compiledStatement);
+        
+    }
+    
+    // Close the database.
+    sqlite3_close(sqlite3Database);
+    
+    
+    
+}
+-(NSArray *)loadDataFromDB:(NSString *)query{
+    // Run the query and indicate that is not executable.
+    // The query string is converted to a char* object.
+    [self runQuery:[query UTF8String] isQueryExecutable:NO];
+    
+    // Returned the loaded results.
+    return (NSArray *)self.arrResults;
+}
+-(void)executeQuery:(NSString *)query{
+    // Run the query and indicate that is executable.
+    [self runQuery:[query UTF8String] isQueryExecutable:YES];
+}
 -(void)uploadCompanies{
+    
+    
+    [self runQuery:"select * from company" isQueryExecutable:false];
 
+    
+    self.companyList = [[NSMutableArray alloc]init];
+        NSLog(@"Results array %@", self.arrResults);
+    for (int i= 0; i < [self.arrResults count]; i++) {
+        Company *companyFromDatabase = [[Company alloc]initWithid:self.arrResults[i][0] andName:self.arrResults[i][1] andLogo:self.arrResults[i][2] andStockCodes:self.arrResults[i][3]];
+        NSLog(@"Result two %@", self.arrResults[i][0]);
+        
+        
+        [self.companyList addObject:companyFromDatabase];
+    }
+    for (int i =0; i< [self.companyList count]; i++) {
+        
+        
+        [self uploadProducts:self.companyList[i]];
+        
+    }
+    
+    
+    NSLog(@"Companylist %@",self.companyList);
 
-Company *Apple =[[Company alloc]initWithName:@"Apple Mobile Devices" andLogo:@"apple.png"andStockCodes:@"AAPL"];
-Company *Samsung = [[Company alloc]initWithName:@"Samsung Mobile Devices" andLogo:@"samsung.jpeg" andStockCodes:@"SSNLF"];
+}
 
-Company *Windows = [[Company alloc]initWithName:@"Windows Mobile Devices" andLogo:@"windows.png"andStockCodes:@"MSFT"];
-Company *Google = [[Company alloc]initWithName:@"Google Mobile Devices" andLogo:@"google.jpg"andStockCodes:@"GOOG"];
+-(void)uploadProducts: (Company*)company{
+    
+    NSString *sql = [NSString stringWithFormat:@"select * from Product WHERE company_id = %@", company.identication];
+    
+    
+    [self runQuery:[sql UTF8String] isQueryExecutable:false];
+    
+    
+    company.products = [[NSMutableArray alloc]init];
+    for (int i= 0; i < [self.arrResults count]; i++){
+        Products *productFromDatabase = [[Products alloc]initWithComanyIdentification: self.arrResults[i][1] andName:self.arrResults[i][2] andlogo:self.arrResults[i][3] andurl:self.arrResults[i][4]] ;
+        [company.products addObject:productFromDatabase]; 
+    
+    }
 
+}
 
-  
-
-Products *ipad = [[Products alloc]initWithName:@"iPad" andlogo:@"ipad.jpg" andurl:@"http://www.apple.com/ipad/"];
-Products *ipod = [[Products alloc]initWithName:@"iPod Touch" andlogo:@"ipod.jpg" andurl:@"http://www.apple.com/ipod/"];
-Products *iphone = [[Products alloc]initWithName:@"iPhone" andlogo:@"iphone.jpg" andurl:@"http://www.apple.com/iphone/"];
-
-Products *galaaxyS4 = [[Products alloc]initWithName:@"Galaxy S4" andlogo:@"galaxys4.jpg" andurl:@"http://www.samsung.com/us/explore/galaxy-note-5-features-and-specs/?cid=ppc-"];
-Products *galaxyNote = [[Products alloc]initWithName:@"Galaxy Note" andlogo:@"galaxynote.png" andurl:@"http://www.samsung.com/global/microsite/galaxynote/note/index.html?type=find"];
-Products *galaxyTab = [[Products alloc]initWithName:@"Galaxy Tab" andlogo:@"galaxytab.png" andurl:@"http://www.samsung.com/global/microsite/galaxytab/10.1/index.html"];
-
-Products *windowsLuma = [[Products alloc]initWithName:@"Windows Luma" andlogo:@"windowsluma.jpg" andurl:@"https://www.microsoft.com/en/mobile/phones/lumia/?order_by=Latest"];
-Products *destroyer = [[Products alloc]initWithName:@"Windows Destroyer" andlogo:@"destroyer.gif" andurl:@"https://en.wikipedia.org/wiki/Destroyer"];
-
-Products *milkyWay = [[Products alloc]initWithName:@"Windows Milky Way" andlogo:@"milkyway.jpg" andurl:@"http://www.universetoday.com/22285/facts-about-the-milky-way/"];
-
-
-Products *nexus6p = [[Products alloc]initWithName:@"Nexus 6P" andlogo:@"nexus6p.jpg" andurl:@"https://store.google.com/product/nexus_6p"];
-Products *nexus5 = [[Products alloc]initWithName:@"Nexus S" andlogo:@"nuxus5.jpg" andurl:@"https://www.google.com/nexus/5x/"];
-Products *nexus4 = [[Products alloc]initWithName:@"Nexus 4" andlogo:@"nexus4.png" andurl:@"https://store.google.com/product/nexus_4?sku=nexus_4_16gb"];
-
-Apple.products = [[NSMutableArray alloc]initWithObjects:ipad,ipod,iphone, nil];
-Samsung.products =[[NSMutableArray alloc] initWithObjects:galaaxyS4,galaxyNote,galaxyTab, nil];
-Windows.products =[[NSMutableArray alloc]initWithObjects:windowsLuma,destroyer, milkyWay, nil];
-Google.products = [[NSMutableArray alloc]initWithObjects:nexus6p,nexus5, nexus4, nil];
-
-self.companyList = [[NSMutableArray alloc]initWithObjects:Apple,Samsung,Windows,Google, nil];
-   }
-
-//-(void)UpdateStockPrice{
-//    for (int i =0; i< [self.companyList count]; i++) {
-//        [self.companyList[i]setStockPrice:self.arrayOfStockPrices[i]];
-//        
-//    }
-//
-//}
 
 -(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockCodes{
-    
-   
-    Company *newCompany = [[Company alloc]initWithName:companyName andLogo:logo andStockCodes:stockCodes];
-    
-    [self.companyList addObject:newCompany];
-    
-}
--(void)createNewProduct:(NSString*)prdouctName andlogo: (NSString*)logo andUrl: (NSString *)url{
-    
-    self.anotherProduct = [[Products alloc]initWithName:prdouctName andlogo:logo andurl:url];
-}
--(void)editCompanyName: (NSString *)names andlogo: (NSString *)logo androw: (NSInteger) indexPathRow andStockSymbol: (NSString *)stockSymbol{
+    char *error;
+    if(sqlite3_open([self.databasePath  UTF8String],&_stockDB ) == SQLITE_OK)
+    {
+        NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO COMPANY (name,logo,stock_symbol) VALUES ('%@','%@','%@')",companyName,logo,stockCodes];
+        const char *insert_stmt = [insertStmt UTF8String];
+      
+        if (sqlite3_exec(self.stockDB, insert_stmt, NULL, NULL, &error) == SQLITE_OK)
+        {
+            NSLog(@"Company added to DB");
+            int companyListCount = [self.companyList count]+1;//counting the number of items in the companyList
+            NSString* companyCountString = [@(companyListCount) stringValue];//Coverting that number in a string so I can use the custom init method.
+            
+            Company *newCompany = [[Company alloc]initWithid:companyCountString andName:companyName andLogo:logo andStockCodes:stockCodes];
+            [self.companyList addObject:newCompany];
+            }
+        sqlite3_close(self.stockDB);
+    }
 
-    self.indexPathRow = indexPathRow;
+   }
+-(void)createNewProductWithCompanyIdentification: (NSString *)companyId andName: (NSString *)name andlogo: (NSString *)logo andUrl: (NSString *)url{
+    char *error;
+    if(sqlite3_open([self.databasePath  UTF8String],&_stockDB ) == SQLITE_OK)
+    {
+        NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO PRODUCT (company_id, name,logo,web_link) VALUES ('%@','%@','%@','%@')",companyId, name,logo,url];
+        const char *insert_stmt = [insertStmt UTF8String];
+        
+        if (sqlite3_exec(self.stockDB, insert_stmt, NULL, NULL, &error) == SQLITE_OK)
+        {
+            NSLog(@"Product added to DB");
+            
+            self.anotherProduct = [[Products alloc]initWithComanyIdentification:companyId andName:name andlogo:logo andurl:url];
+        }
+        sqlite3_close(self.stockDB);
+    }
     
-    [self.companyList[self.indexPathRow]setName:names];
-    [self.companyList[self.indexPathRow]setLogo:logo];
-    [self.companyList[self.indexPathRow]setStockCodes:stockSymbol];
+    
+    
+    
+                           
 }
--(void)editProductName:(NSString *)names andlogo: (NSString *)logo andUrl: (NSString*) url{
+-(void)deleteCompanyData:(NSString *)deleteQuery
+{
+    
+    [self executeQuery:deleteQuery];
+}
+-(void)deleteProductData:(NSString *)deleteQuery
+{
+    
+    [self executeQuery:deleteQuery];
+}
 
-}
 
 @end

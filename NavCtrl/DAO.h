@@ -11,8 +11,13 @@
 #import "Company.h"
 #import "Products.h"
 #import "EditproductViewController.h"
+#import <sqlite3.h>
 
 @interface DAO : NSObject
+
+
+@property (nonatomic)sqlite3 *stockDB;
+
 @property (nonatomic,retain)NSMutableArray *currentCompany;
 @property (nonatomic, retain) NSMutableArray *companyList;
 @property (nonatomic, retain) NSMutableArray *products;
@@ -21,13 +26,26 @@
 @property (nonatomic) NSUInteger indexPathRow;
 @property (nonatomic, strong)Products *anotherProduct;
 @property (nonatomic, strong) NSMutableArray *arrayOfStockPrices;
+@property (nonatomic, strong) NSMutableArray *arrColumnNames;
+@property (nonatomic) int affectedRows;
+@property(nonatomic, strong)NSString *databasePath; 
+
+//For the Database
+@property (nonatomic) long long lastInsertedRowID;
+
+-(NSArray *)loadDataFromDB:(NSString *)query;
+
+-(void)executeQuery:(NSString *)query;
+-(void)deleteCompanyData:(NSString *)deleteQuery;
+-(void)deleteProductData:(NSString *)deleteQuery;
+
+
+-(instancetype)initWithDatabaseFilename:(NSString *)dbFilename;
+
 
 
 +(DAO *)sharedDao;
--(void)uploadCompanies;
 -(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockPrice;
--(void)createNewProduct:(NSString*)prdouctName andlogo: (NSString*)logo andUrl: (NSString *)url;
--(void)editCompanyName: (NSString *)names andlogo: (NSString *)logo androw: (NSInteger) indexPathRow andStockSymbol: (NSString *)stockSymbol;
--(void)editProductName:(NSString *)names andlogo: (NSString *)logo andUrl: (NSString*) url;
+-(void)createNewProductWithCompanyIdentification: (NSString *)companyId andName: (NSString *)name andlogo: (NSString *)logo andUrl: (NSString *)url;
 //-(void)UpdateStockPrice;
 @end

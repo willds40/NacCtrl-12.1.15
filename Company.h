@@ -14,9 +14,10 @@
 @property (strong, nonatomic)NSString * name;
 @property (strong, nonatomic)NSString * logo;
 @property (strong, nonatomic)NSString * stockCodes;
-@property (nonatomic, strong)NSString *stockPrice; 
+@property (nonatomic, strong)NSString *stockPrice;
+@property (nonatomic, strong)NSString *identication; 
 
--(instancetype)initWithName:(NSString *)name andLogo: (NSString *)logo andStockCodes: (NSString *)stockCodes;
+-(instancetype)initWithid:(NSString *)identifcation andName:(NSString *)string andLogo: (NSString *)logo andStockCodes: (NSString *)stockCodes;
 
 
 

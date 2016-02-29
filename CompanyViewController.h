@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Company.h"
 #import "DAO.h"
+#import <sqlite3.h>
 
 @class ProductViewController;
 @class CompanyEditViewController;

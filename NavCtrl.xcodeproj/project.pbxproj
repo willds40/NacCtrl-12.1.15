@@ -16,6 +16,7 @@
 		48A656D018163BF200746D36 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A656B818163BF200746D36 /* UIKit.framework */; };
 		48A656D818163BF200746D36 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48A656D618163BF200746D36 /* InfoPlist.strings */; };
 		48A656DA18163BF200746D36 /* NavCtrlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A656D918163BF200746D36 /* NavCtrlTests.m */; };
+		BE4947121C80E1B200CA2158 /* stock.db in Resources */ = {isa = PBXBuildFile; fileRef = BE4947111C80E1B200CA2158 /* stock.db */; };
 		BEAF55851C7383560005E86A /* CompanyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAF55831C7383560005E86A /* CompanyViewController.m */; };
 		BEAF55861C7383560005E86A /* CompanyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAF55841C7383560005E86A /* CompanyViewController.xib */; };
 		BEAF55891C73836D0005E86A /* ProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAF55881C73836D0005E86A /* ProductViewController.m */; };
@@ -42,6 +43,7 @@
 		BEAF55C21C7388350005E86A /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAF55C01C7388350005E86A /* DetailViewController.m */; };
 		BEAF55C31C7388350005E86A /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAF55C11C7388350005E86A /* DetailViewController.xib */; };
 		BEB31B2C1C6E41F300EAB978 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB31B2B1C6E41F300EAB978 /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		BEB7CFE81C80A7FC00013B4D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB7CFE71C80A7FC00013B4D /* libsqlite3.tbd */; };
 		BEF7C9F51C75003900C2C03E /* CompanyEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7C9F31C75003900C2C03E /* CompanyEditViewController.m */; };
 		BEF7C9F61C75003900C2C03E /* CompanyEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF7C9F41C75003900C2C03E /* CompanyEditViewController.xib */; };
 		BEF7C9FA1C75348A00C2C03E /* EditproductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7C9F81C75348A00C2C03E /* EditproductViewController.m */; };
@@ -72,6 +74,7 @@
 		48A656D518163BF200746D36 /* NavCtrlTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NavCtrlTests-Info.plist"; sourceTree = "<group>"; };
 		48A656D718163BF200746D36 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		48A656D918163BF200746D36 /* NavCtrlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavCtrlTests.m; sourceTree = "<group>"; };
+		BE4947111C80E1B200CA2158 /* stock.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = stock.db; sourceTree = "<group>"; };
 		BEAF55821C7383560005E86A /* CompanyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyViewController.h; sourceTree = SOURCE_ROOT; };
 		BEAF55831C7383560005E86A /* CompanyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyViewController.m; sourceTree = SOURCE_ROOT; };
 		BEAF55841C7383560005E86A /* CompanyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompanyViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -102,6 +105,7 @@
 		BEAF55C01C7388350005E86A /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DetailViewController.m; path = NavCtrl/DetailViewController.m; sourceTree = "<group>"; };
 		BEAF55C11C7388350005E86A /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DetailViewController.xib; path = NavCtrl/DetailViewController.xib; sourceTree = "<group>"; };
 		BEB31B2B1C6E41F300EAB978 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		BEB7CFE71C80A7FC00013B4D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		BEF7C9F21C75003900C2C03E /* CompanyEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyEditViewController.h; sourceTree = "<group>"; };
 		BEF7C9F31C75003900C2C03E /* CompanyEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyEditViewController.m; sourceTree = "<group>"; };
 		BEF7C9F41C75003900C2C03E /* CompanyEditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompanyEditViewController.xib; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEB7CFE81C80A7FC00013B4D /* libsqlite3.tbd in Frameworks */,
 				BEB31B2C1C6E41F300EAB978 /* WebKit.framework in Frameworks */,
 				48A656B718163BF200746D36 /* CoreGraphics.framework in Frameworks */,
 				48A656B918163BF200746D36 /* UIKit.framework in Frameworks */,
@@ -180,6 +185,7 @@
 		48A656A818163BF200746D36 = {
 			isa = PBXGroup;
 			children = (
+				BE4947111C80E1B200CA2158 /* stock.db */,
 				BEF7C9F11C74FC2E00C2C03E /* Model */,
 				48A656BA18163BF200746D36 /* ViewComtroller */,
 				48A656D318163BF200746D36 /* NavCtrlTests */,
@@ -200,6 +206,7 @@
 		48A656B318163BF200746D36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BEB7CFE71C80A7FC00013B4D /* libsqlite3.tbd */,
 				BEB31B2B1C6E41F300EAB978 /* WebKit.framework */,
 				48A656B418163BF200746D36 /* Foundation.framework */,
 				48A656B618163BF200746D36 /* CoreGraphics.framework */,
@@ -398,6 +405,7 @@
 				BEAF55AE1C73839C0005E86A /* windowsluma.jpg in Resources */,
 				BEAF55AD1C73839C0005E86A /* windows.png in Resources */,
 				BEAF55A91C73839C0005E86A /* nexus4.png in Resources */,
+				BE4947121C80E1B200CA2158 /* stock.db in Resources */,
 				BEF7C9FB1C75348A00C2C03E /* EditproductViewController.xib in Resources */,
 				BEAF55A61C73839C0005E86A /* ipod.jpg in Resources */,
 				BEAF55A31C73839C0005E86A /* google.jpg in Resources */,

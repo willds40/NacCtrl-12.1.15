@@ -23,6 +23,7 @@
 @property (nonatomic,strong) NSMutableArray *productsArray;
 - (IBAction)saveButton:(id)sender;
 @property (retain, nonatomic) IBOutlet UIButton *saveButtonOutlet;
+@property (strong, nonatomic)NSString *currentCompanyIdentificaion; 
 
 @property (strong, nonatomic)Products *productPassedIn; 
 @end

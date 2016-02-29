@@ -69,7 +69,8 @@
 
 - (IBAction)saveButton:(id)sender {
     
-    [[DAO sharedDao]editCompanyName:self.companyEdit.text andlogo:self.companyImageEdit.text androw:self.indexPathRow andStockSymbol:self.stockSymbolAdd.text];
+//    [[DAO sharedDao]editCompanyName:self.companyEdit.text andlogo:self.companyImageEdit.text androw:self.indexPathRow andStockSymbol:self.stockSymbolAdd.text];
+//    
     [self.navigationController popToRootViewControllerAnimated:YES];
 
     

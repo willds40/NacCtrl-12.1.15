@@ -67,7 +67,9 @@
     
     EditproductViewController *productEdit = [[EditproductViewController alloc]init];
     Products *prod = self.currentCompany.products[indexPath.row];
-        productEdit.productPassedIn = prod; 
+        productEdit.productPassedIn = prod;
+        
+
     
     productEdit.productNameString = prod.name;
     productEdit.logoString = prod.logo;
@@ -86,7 +88,7 @@
 //    [DAO sharedDao].indexPathRow = self.indexPathRow; 
     EditproductViewController *productEdit = [[EditproductViewController alloc]init];
     productEdit.productsArray = self.currentCompany.products; 
-    
+    productEdit.currentCompanyIdentificaion = self.currentCompany.identication; 
     
     [self.navigationController pushViewController:productEdit animated:YES];
     
@@ -131,6 +133,7 @@
     }
     // Configure the cell...
     cell.textLabel.text = [[self.currentCompany.products objectAtIndex:[indexPath row] ]name];
+    
     cell.imageView.image = [UIImage imageNamed:[[self.currentCompany.products objectAtIndex:[indexPath row]]logo]];
 
     return cell;
@@ -145,14 +148,23 @@
 }
 */
 
-/*
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    NSString *prodName = [self.currentCompany.products[indexPath.row]name];
+    
+    [[DAO sharedDao] deleteProductData:[NSString stringWithFormat:@"DELETE FROM product WHERE name = '%@'",prodName]];
+    
+    [self.currentCompany.products removeObjectAtIndex:indexPath.row];
+        
+    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+
+    [self.tableView reloadData];
  
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.

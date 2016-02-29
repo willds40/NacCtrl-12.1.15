@@ -7,6 +7,7 @@
 //
 
 #import "EditproductViewController.h"
+#import "ProductViewController.h" 
 
 @interface EditproductViewController ()
 
@@ -60,7 +61,8 @@
 }
 - (IBAction)SubmitButton:(id)sender {
     
-    [[DAO sharedDao] createNewProduct:self.EditProductTextLabel.text andlogo:self.EditLogoTextField.text andUrl:self.WebLinkTextField.text];
+    
+  [[DAO sharedDao] createNewProductWithCompanyIdentification:self.currentCompanyIdentificaion andName:self.EditProductTextLabel.text andlogo:self.EditLogoTextField.text andUrl:self.WebLinkTextField.text];
     
     [self.productsArray addObject: [DAO sharedDao].anotherProduct];
     

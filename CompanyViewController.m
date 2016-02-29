@@ -199,6 +199,15 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //         Delete the row from the data source
+     
+       
+        
+        NSInteger Nsint = indexPath.row +1;
+        NSLog(@" The company being deleted is at %ld", (long)Nsint);
+        int companyId = (int) Nsint;
+        
+     [[DAO sharedDao] deleteCompanyData:[NSString stringWithFormat:@"DELETE FROM company WHERE id = %d",companyId]];
+        
         [self.dao.companyList removeObjectAtIndex:indexPath.row];
         [self.dao.logoList removeObjectAtIndex:indexPath.row];
         [self.dao.currentCompany removeObjectAtIndex:indexPath.row];
@@ -249,5 +258,7 @@
      pushViewController:self.productViewController
      animated:YES];
 }
+
+
 
 @end

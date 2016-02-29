@@ -9,9 +9,9 @@
 #import "Company.h"
 
 @implementation Company
--(instancetype)initWithName:(NSString *)name andLogo: (NSString *)logo andStockCodes:(NSString *)stockCodes {
+-(instancetype)initWithid:(NSString *)identification andName:(NSString *)name andLogo: (NSString *)logo andStockCodes: (NSString *)stockCodes {
 self = [super init];
-    
+    self.identication = identification;
     self.name = name;
     self.logo = logo;
     self.stockCodes = stockCodes;
