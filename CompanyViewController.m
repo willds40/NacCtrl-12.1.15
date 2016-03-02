@@ -73,9 +73,10 @@
     NSString *stockURL = [NSString stringWithFormat:@"https://finance.yahoo.com/d/quotes.csv?s=%@&f=l1",[stockPriceArray componentsJoinedByString:@"+" ]];
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithURL:[NSURL URLWithString:stockURL]
+      
             completionHandler:^(NSData *data,
                                 NSURLResponse *response,
-                                NSError *error) {
+                                NSError *error){
                 // handle response
                 NSString *stockQuoteStrings = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
                 NSLog(@"%@", stockQuoteStrings);
@@ -85,8 +86,10 @@
                     if (index == self.dao.companyList.count) break;
                     [[self.dao.companyList objectAtIndex:index]setStockPrice:stockPrice];
                     index++;
+                    
                 }
-                
+                [stockQuoteStrings release];
+                [stockPriceArray release];
                 
 //                alternative way of doing it. This calls a makes a nsmutable array and then calls a method in the DAO
                 
@@ -101,6 +104,7 @@
                 
                 
             }] resume];
+    
     
     
     
@@ -140,6 +144,7 @@
         companyEdit.indexPathRow = indexPath.row;
         
         [self.navigationController pushViewController:companyEdit animated:YES];
+        [companyEdit release];
     }
     
 }
@@ -147,6 +152,7 @@
 -(void)addCompany{
     CompanyEditViewController *companyAdd = [[CompanyEditViewController alloc]init];
     [self.navigationController pushViewController:companyAdd animated:YES];
+    [companyAdd release]; 
 }
 
 - (void)didReceiveMemoryWarning
@@ -174,7 +180,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Configure the cell...
@@ -206,7 +212,7 @@
         NSLog(@" The company being deleted is at %ld", (long)Nsint);
         int companyId = (int) Nsint;
         
-     [[DAO sharedDao] deleteCompanyData:[NSString stringWithFormat:@"DELETE FROM company WHERE id = %d",companyId]];
+     [[DAO sharedDao] deleteCompanyData:[NSString stringWithFormat:@"%d",companyId]];
         
         [self.dao.companyList removeObjectAtIndex:indexPath.row];
         [self.dao.logoList removeObjectAtIndex:indexPath.row];

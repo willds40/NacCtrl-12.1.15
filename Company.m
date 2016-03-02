@@ -20,6 +20,17 @@ self = [super init];
 
 
 }
+-(void)dealloc{
+    
+    [_name release];
+    [_logo release];
+    [_stockCodes release];
+    [super dealloc];
+}
+
+
+
+
 //-(instancetype)initWithName:(NSString *)name andLogoURL: (NSString *)logo andStockPrice: (NSString *)stockPrice{
 //    self = [super init];
 //    

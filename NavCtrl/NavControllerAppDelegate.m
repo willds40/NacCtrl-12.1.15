@@ -19,13 +19,19 @@
     [[CompanyViewController alloc]
      initWithNibName:@"CompanyViewController" bundle:nil];
     
-    self.navigationController = [[UINavigationController alloc]
+    
+    _navigationController = [[UINavigationController alloc]
                             initWithRootViewController:rootController];
     
-    self.window = [[UIWindow alloc]
+    [rootController release];
+    
+    _window = [[UIWindow alloc]
                    initWithFrame:[[UIScreen mainScreen] bounds]];
 //  self.window addSubview:self.navigationController.view];
     [self.window setRootViewController:self.navigationController];
+    
+    [self.navigationController release];
+    
     [self.window makeKeyAndVisible];
     return YES;
     
@@ -37,6 +43,7 @@
     [self.window makeKeyAndVisible];
     return YES;
      */
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

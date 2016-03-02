@@ -25,7 +25,8 @@
         [webView loadRequest:nsrequest];
        [self.view addSubview:webView];
     
-    
+    [webView release];
+    [theConfiguration release];
    
 }
 

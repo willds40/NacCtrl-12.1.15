@@ -39,7 +39,7 @@
     [button addTarget:self
                action:@selector(pushToProductViewEditor)
      forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"AddCompany" forState:UIControlStateNormal];
+    [button setTitle:@"AddProduct" forState:UIControlStateNormal];
     button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
     button.backgroundColor = [UIColor blueColor];
     [self.view addSubview:button];
@@ -62,10 +62,10 @@
         NSLog(@"long press on table view but not on a row");
     }
     else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-               NSLog(@"long press on table view at row %d", indexPath.row);
+               NSLog(@"long press on table view at row %ld", (long)indexPath.row);
 
     
-    EditproductViewController *productEdit = [[EditproductViewController alloc]init];
+    EditproductViewController *productEdit = [[[EditproductViewController alloc]init]autorelease];
     Products *prod = self.currentCompany.products[indexPath.row];
         productEdit.productPassedIn = prod;
         
@@ -78,6 +78,7 @@
     
     [self.navigationController pushViewController:productEdit animated:YES];
     
+//        [productEdit release];
     }
     
 }
@@ -85,14 +86,16 @@
 
 -(void)pushToProductViewEditor{
     
-//    [DAO sharedDao].indexPathRow = self.indexPathRow; 
+
     EditproductViewController *productEdit = [[EditproductViewController alloc]init];
-    productEdit.productsArray = self.currentCompany.products; 
-    productEdit.currentCompanyIdentificaion = self.currentCompany.identication; 
+    productEdit.productsArray = self.currentCompany.products;
+    productEdit.currentCompanyIdentificaion = self.currentCompany.identication;
     
     [self.navigationController pushViewController:productEdit animated:YES];
-    
-    
+   
+
+   [productEdit release];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -129,7 +132,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier]autorelease];
     }
     // Configure the cell...
     cell.textLabel.text = [[self.currentCompany.products objectAtIndex:[indexPath row] ]name];
@@ -137,6 +140,7 @@
     cell.imageView.image = [UIImage imageNamed:[[self.currentCompany.products objectAtIndex:[indexPath row]]logo]];
 
     return cell;
+    [cell release];
 }
 
 /*
@@ -155,7 +159,7 @@
     
     NSString *prodName = [self.currentCompany.products[indexPath.row]name];
     
-    [[DAO sharedDao] deleteProductData:[NSString stringWithFormat:@"DELETE FROM product WHERE name = '%@'",prodName]];
+    [[DAO sharedDao] deleteProductData:prodName];
     
     [self.currentCompany.products removeObjectAtIndex:indexPath.row];
         
@@ -197,6 +201,6 @@
     
        //     Push the view controller.
         [self.navigationController pushViewController:webviewController animated:YES];
-    
+    [webviewController release];
 }
 @end

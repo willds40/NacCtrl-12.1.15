@@ -56,7 +56,6 @@
     [_WebLinkTextField release];
     [_submitButtonOutlet release];
     [_saveButtonOutlet release];
-    [_saveButtonOutlet release];
     [super dealloc];
 }
 - (IBAction)SubmitButton:(id)sender {

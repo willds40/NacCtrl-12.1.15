@@ -70,24 +70,30 @@
     sqlite3 *sqlite3Database;
     
     // Set the database file path.
-    self.databasePath = [self.documentsDirectory stringByAppendingPathComponent:self.databaseFilename];
+    _databasePath = [self.documentsDirectory stringByAppendingPathComponent:self.databaseFilename];
     
     // Initialize the results array.
     if (self.arrResults != nil) {
-        [self.arrResults removeAllObjects];
-        self.arrResults = nil;
+        
+    [self.arrResults removeAllObjects];
+      [_arrResults release];
+//        self.arrResults = nil;
     }
-    self.arrResults = [[NSMutableArray alloc] init];
+    _arrResults = [[NSMutableArray alloc] init];
     
     // Initialize the column names array.
-    if (self.arrColumnNames != nil) {
-        [self.arrColumnNames removeAllObjects];
-        self.arrColumnNames = nil;
+    if (_arrColumnNames != nil) {
+        [_arrColumnNames removeAllObjects];
+        [self.arrColumnNames release];
+        _arrColumnNames = nil;
     }
-    self.arrColumnNames = [[NSMutableArray alloc] init];
+    
+    
     
     // Open the database.
-    BOOL openDatabaseResult = sqlite3_open([self.databasePath UTF8String], &sqlite3Database);
+    int openDatabaseResult = sqlite3_open([self.databasePath UTF8String], &sqlite3Database);
+    
+    
     if(openDatabaseResult == SQLITE_OK){
         // Declare a sqlite3_stmt object in which will be stored the query after having been compiled into a SQLite statement.
         sqlite3_stmt *compiledStatement;
@@ -121,17 +127,22 @@
                         }
                         
                         // Keep the current column name.
+                        if(!_arrColumnNames){
+                            _arrColumnNames = [[NSMutableArray alloc] init];
+                        }
                         if (self.arrColumnNames.count != totalColumns) {
                             dbDataAsChars = (char *)sqlite3_column_name(compiledStatement, i);
                             [self.arrColumnNames addObject:[NSString stringWithUTF8String:dbDataAsChars]];
                         }
                     }
-                    
+                   
                     // Store each fetched data row in the results array, but first check if there is actually data.
                     if (arrDataRow.count > 0) {
                         NSLog(@"%@", arrDataRow);
                         [self.arrResults addObject:arrDataRow];
+                        
                     }
+                    [arrDataRow release];
                 }
             }else {
                 // This is the case of an executable query (insert, update, ...).
@@ -157,15 +168,15 @@
         
         // Release the compiled statement from memory.
         sqlite3_finalize(compiledStatement);
-        
+       
     }
     
     // Close the database.
     sqlite3_close(sqlite3Database);
     
+  
     
-    
-}
+    }
 -(NSArray *)loadDataFromDB:(NSString *)query{
     // Run the query and indicate that is not executable.
     // The query string is converted to a char* object.
@@ -184,15 +195,19 @@
     [self runQuery:"select * from company" isQueryExecutable:false];
 
     
-    self.companyList = [[NSMutableArray alloc]init];
-        NSLog(@"Results array %@", self.arrResults);
-    for (int i= 0; i < [self.arrResults count]; i++) {
-        Company *companyFromDatabase = [[Company alloc]initWithid:self.arrResults[i][0] andName:self.arrResults[i][1] andLogo:self.arrResults[i][2] andStockCodes:self.arrResults[i][3]];
-        NSLog(@"Result two %@", self.arrResults[i][0]);
+    _companyList = [[NSMutableArray alloc]init];
+    for (int i= 0; i < [_arrResults count]; i++) {
+        Company *companyFromDatabase = [[Company alloc]initWithid:_arrResults[i][0] andName:_arrResults[i][1] andLogo:_arrResults[i][2] andStockCodes:_arrResults[i][3]];
+        NSLog(@"Result two %@", _arrResults[i][0]);
         
         
         [self.companyList addObject:companyFromDatabase];
+        [companyFromDatabase release];
+        
+    
     }
+
+
     for (int i =0; i< [self.companyList count]; i++) {
         
         
@@ -211,68 +226,65 @@
     
     
     [self runQuery:[sql UTF8String] isQueryExecutable:false];
+ 
+    
+   _products = [[NSMutableArray alloc]init];
+    company.products = _products;
+   [_products release];
     
     
-    company.products = [[NSMutableArray alloc]init];
     for (int i= 0; i < [self.arrResults count]; i++){
         Products *productFromDatabase = [[Products alloc]initWithComanyIdentification: self.arrResults[i][1] andName:self.arrResults[i][2] andlogo:self.arrResults[i][3] andurl:self.arrResults[i][4]] ;
-        [company.products addObject:productFromDatabase]; 
+        [company.products addObject:productFromDatabase];
+        [productFromDatabase release];
+        
     
     }
-
+ 
 }
 
 
 -(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockCodes{
-    char *error;
-    if(sqlite3_open([self.databasePath  UTF8String],&_stockDB ) == SQLITE_OK)
-    {
-        NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO COMPANY (name,logo,stock_symbol) VALUES ('%@','%@','%@')",companyName,logo,stockCodes];
-        const char *insert_stmt = [insertStmt UTF8String];
-      
-        if (sqlite3_exec(self.stockDB, insert_stmt, NULL, NULL, &error) == SQLITE_OK)
-        {
-            NSLog(@"Company added to DB");
-            int companyListCount = [self.companyList count]+1;//counting the number of items in the companyList
-            NSString* companyCountString = [@(companyListCount) stringValue];//Coverting that number in a string so I can use the custom init method.
+    NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO COMPANY (name,logo,stock_symbol) VALUES ('%@','%@','%@')",companyName,logo,stockCodes];
+    
+    [self executeQuery:insertStmt];
+
+    NSLog(@"Company added to DB");
+    int companyListCount = [self.companyList count]+1;//counting the number of items in the companyList
+    
+    NSString* companyCountString = [@(companyListCount) stringValue];//Coverting that number in a string so I can use the custom init method.
             
             Company *newCompany = [[Company alloc]initWithid:companyCountString andName:companyName andLogo:logo andStockCodes:stockCodes];
             [self.companyList addObject:newCompany];
-            }
-        sqlite3_close(self.stockDB);
-    }
+            [newCompany release];
 
    }
 -(void)createNewProductWithCompanyIdentification: (NSString *)companyId andName: (NSString *)name andlogo: (NSString *)logo andUrl: (NSString *)url{
-    char *error;
-    if(sqlite3_open([self.databasePath  UTF8String],&_stockDB ) == SQLITE_OK)
-    {
+
         NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO PRODUCT (company_id, name,logo,web_link) VALUES ('%@','%@','%@','%@')",companyId, name,logo,url];
-        const char *insert_stmt = [insertStmt UTF8String];
-        
-        if (sqlite3_exec(self.stockDB, insert_stmt, NULL, NULL, &error) == SQLITE_OK)
-        {
-            NSLog(@"Product added to DB");
+        [self executeQuery:insertStmt];
+        NSLog(@"Product added to DB");
             
-            self.anotherProduct = [[Products alloc]initWithComanyIdentification:companyId andName:name andlogo:logo andurl:url];
+            _anotherProduct = [[Products alloc]initWithComanyIdentification:companyId andName:name andlogo:logo andurl:url];
+             
         }
-        sqlite3_close(self.stockDB);
-    }
-    
-    
-    
-    
-                           
-}
+        
 -(void)deleteCompanyData:(NSString *)deleteQuery
 {
+  NSString * deleteQueryCompany =  [NSString stringWithFormat:@"DELETE FROM company WHERE id = %@",deleteQuery];
     
-    [self executeQuery:deleteQuery];
+    [self executeQuery:deleteQueryCompany];
+    
 }
+
+
 -(void)deleteProductData:(NSString *)deleteQuery
 {
+ // NSString *deleteQueryProduct =  [NSString stringWithFormat:@"DELETE FROM product WHERE name = '%@'", deleteQuery];
     
-    [self executeQuery:deleteQuery];
+    
+   // [self executeQuery:deleteQueryProduct];
+    
 }
 
 

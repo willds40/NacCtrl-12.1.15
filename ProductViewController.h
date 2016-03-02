@@ -14,5 +14,6 @@
 
 @interface ProductViewController : UITableViewController
 @property (nonatomic, retain) Company *currentCompany;
+
 -(void)pushToProductViewEditor;
 @end

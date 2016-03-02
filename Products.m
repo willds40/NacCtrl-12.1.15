@@ -26,5 +26,13 @@ self = [super init];
 
 }
 
+-(void)dealloc{
+    [_companyIdentification release];
+    [_name release];
+    [_logo release];
+    [_url release];
+    [super dealloc];
+}
+
 
 @end
