@@ -44,6 +44,7 @@
 		BEAF55C31C7388350005E86A /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAF55C11C7388350005E86A /* DetailViewController.xib */; };
 		BEB31B2C1C6E41F300EAB978 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB31B2B1C6E41F300EAB978 /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BEB7CFE81C80A7FC00013B4D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB7CFE71C80A7FC00013B4D /* libsqlite3.tbd */; };
+		BEF06C0A1C8E0371008B00B8 /* dataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEF06C081C8E0371008B00B8 /* dataModel.xcdatamodeld */; };
 		BEF7C9F51C75003900C2C03E /* CompanyEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7C9F31C75003900C2C03E /* CompanyEditViewController.m */; };
 		BEF7C9F61C75003900C2C03E /* CompanyEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF7C9F41C75003900C2C03E /* CompanyEditViewController.xib */; };
 		BEF7C9FA1C75348A00C2C03E /* EditproductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7C9F81C75348A00C2C03E /* EditproductViewController.m */; };
@@ -106,6 +107,7 @@
 		BEAF55C11C7388350005E86A /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DetailViewController.xib; path = NavCtrl/DetailViewController.xib; sourceTree = "<group>"; };
 		BEB31B2B1C6E41F300EAB978 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		BEB7CFE71C80A7FC00013B4D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		BEF06C091C8E0371008B00B8 /* dataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dataModel.xcdatamodel; sourceTree = "<group>"; };
 		BEF7C9F21C75003900C2C03E /* CompanyEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyEditViewController.h; sourceTree = "<group>"; };
 		BEF7C9F31C75003900C2C03E /* CompanyEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyEditViewController.m; sourceTree = "<group>"; };
 		BEF7C9F41C75003900C2C03E /* CompanyEditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompanyEditViewController.xib; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 		BEF7C9F11C74FC2E00C2C03E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BEF06C081C8E0371008B00B8 /* dataModel.xcdatamodeld */,
 				BEF9A3D41C73960C009E6736 /* Products.h */,
 				BEF9A3D51C73960C009E6736 /* Products.m */,
 				BEF9A3D11C7395AA009E6736 /* Company.h */,
@@ -432,6 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEF7C9FA1C75348A00C2C03E /* EditproductViewController.m in Sources */,
+				BEF06C0A1C8E0371008B00B8 /* dataModel.xcdatamodeld in Sources */,
 				BEF9A3D61C73960C009E6736 /* Products.m in Sources */,
 				BEF7C9F51C75003900C2C03E /* CompanyEditViewController.m in Sources */,
 				BEAF55851C7383560005E86A /* CompanyViewController.m in Sources */,
@@ -658,6 +662,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BEF06C081C8E0371008B00B8 /* dataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BEF06C091C8E0371008B00B8 /* dataModel.xcdatamodel */,
+			);
+			currentVersion = BEF06C091C8E0371008B00B8 /* dataModel.xcdatamodel */;
+			path = dataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 48A656A918163BF200746D36 /* Project object */;
 }
