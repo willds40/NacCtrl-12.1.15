@@ -11,12 +11,12 @@
 #import "Company.h"
 #import "Products.h"
 #import "EditproductViewController.h"
-#import <sqlite3.h>
+#import <CoreData/CoreData.h>
 
 @interface DAO : NSObject
 
 
-@property (nonatomic)sqlite3 *stockDB;
+
 
 @property (nonatomic,retain)NSMutableArray *currentCompany;
 @property (nonatomic, retain) NSMutableArray *companyList;
@@ -28,24 +28,28 @@
 @property (nonatomic, strong) NSMutableArray *arrayOfStockPrices;
 @property (nonatomic, strong) NSMutableArray *arrColumnNames;
 @property (nonatomic) int affectedRows;
-@property(nonatomic, strong)NSString *databasePath; 
+@property(nonatomic, strong)NSString *databasePath;
+@property (nonatomic, strong)NSMutableArray *productList; 
 
-//For the Database
-@property (nonatomic) long long lastInsertedRowID;
+//for Core Data
+@property(nonatomic, strong) NSManagedObjectContext *context;
+@property(nonatomic,strong) NSManagedObjectModel *model;
 
--(NSArray *)loadDataFromDB:(NSString *)query;
+-(NSString *) archivePath;
+-(void)initModelContext;
 
--(void)executeQuery:(NSString *)query;
--(void)deleteCompanyData:(NSString *)deleteQuery;
--(void)deleteProductData:(NSString *)deleteQuery;
-
-
--(instancetype)initWithDatabaseFilename:(NSString *)dbFilename;
-
-
-
+-(void)createNewCompany: (NSString *)company andlogo:(NSString *)logo andstockCodes:(NSString *)stockSymbol;
+-(void)createNewProductWithCompanyId: (int)currentCompanyIdentificaion andName:(NSString *)name andlogo:(NSString *)logo andUrl: (NSString *)url;
+-(void)deleteCompanyData:(int)companyID;
+-(void)deleteProductData:(NSString *)productName;
 +(DAO *)sharedDao;
--(void)createNewCompany:(NSString*)companyName andlogo: (NSString*)logo andstockCodes: (NSString *)stockPrice;
--(void)createNewProductWithCompanyIdentification: (NSString *)companyId andName: (NSString *)name andlogo: (NSString *)logo andUrl: (NSString *)url;
-//-(void)UpdateStockPrice;
+-(void)fetchRequest;
+
+-(void) saveChanges;
+-(void)undoLastAction;
+- (void)redoLastUndo;
+-(void)rollbackAllChanges;
+-(void)undoLastActionProductWithcurrentCompny:(Company *)currentCompany;
+-(void)redoLastUndoforProductWithCurrentCompany: (Company *)currentCompany;
+-(void)rollbackAllChangesProducts: (Company *)currentCompany;
 @end

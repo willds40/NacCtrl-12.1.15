@@ -33,6 +33,11 @@
         self.EditLogoTextField.text = self.logoString;
     }
     
+    self.EditProductTextLabel.delegate = self;
+    self.EditLogoTextField.delegate =self;
+    self.WebLinkTextField.delegate=self;
+
+  
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,13 +64,16 @@
     [super dealloc];
 }
 - (IBAction)SubmitButton:(id)sender {
+    NSLog(@"The current company is %d", self.currentCompanyIdentificaion);
     
     
-  [[DAO sharedDao] createNewProductWithCompanyIdentification:self.currentCompanyIdentificaion andName:self.EditProductTextLabel.text andlogo:self.EditLogoTextField.text andUrl:self.WebLinkTextField.text];
+    [[DAO sharedDao] createNewProductWithCompanyId:self.currentCompanyIdentificaion andName:self.EditProductTextLabel.text andlogo:self.EditLogoTextField.text andUrl:self.WebLinkTextField.text];
     
-    [self.productsArray addObject: [DAO sharedDao].anotherProduct];
+    [self.productsArray addObject: [[DAO sharedDao] anotherProduct]] ;
+    
     
     [self.navigationController popViewControllerAnimated:YES];//pops back to previous view controller.
+
 }
 - (IBAction)saveButton:(id)sender {
     
@@ -77,4 +85,11 @@
     
     
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
+
 @end

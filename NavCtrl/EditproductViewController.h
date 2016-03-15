@@ -10,7 +10,8 @@
 #import "DAO.h"
 #import "Products.h"
 
-@interface EditproductViewController : UIViewController
+@interface EditproductViewController : UIViewController<UITextFieldDelegate>
+
 @property (retain, nonatomic) IBOutlet UITextField *EditProductTextLabel;
 @property (retain, nonatomic) IBOutlet UITextField *EditLogoTextField;
 - (IBAction)SubmitButton:(id)sender;
@@ -23,7 +24,7 @@
 @property (nonatomic,strong) NSMutableArray *productsArray;
 - (IBAction)saveButton:(id)sender;
 @property (retain, nonatomic) IBOutlet UIButton *saveButtonOutlet;
-@property (strong, nonatomic)NSString *currentCompanyIdentificaion; 
+@property (nonatomic)int currentCompanyIdentificaion;
 
 @property (strong, nonatomic)Products *productPassedIn; 
 @end

@@ -11,12 +11,12 @@
 @implementation Products
 
 
--(instancetype)initWithComanyIdentification: (NSString *)companyIdentification andName: (NSString *)name andlogo: (NSString *)logo andurl: (NSString *)url{
+-(instancetype)initWithName: (NSString *)name andlogo: (NSString *)logo andurl: (NSString *)url{
 
 
 self = [super init];
     
-    self.companyIdentification = companyIdentification;
+    
     self.name = name;
     self.logo = logo;
     self.url = url;
@@ -27,7 +27,6 @@ self = [super init];
 }
 
 -(void)dealloc{
-    [_companyIdentification release];
     [_name release];
     [_logo release];
     [_url release];

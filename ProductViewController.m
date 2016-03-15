@@ -44,13 +44,69 @@
     button.backgroundColor = [UIColor blueColor];
     [self.view addSubview:button];
     
+    UIBarButtonItem *saveChanges = [[UIBarButtonItem alloc]
+                                    initWithTitle:@"Save Changes"
+                                    style:UIBarButtonItemStyleBordered
+                                    target:self
+                                    action:@selector(saveChanges)];
+    UIBarButtonItem *undo = [[UIBarButtonItem alloc]
+                             initWithTitle:@"Undo"
+                             style:UIBarButtonItemStyleBordered
+                             target:self
+                             action:@selector(undoLastAction)];
+    UIBarButtonItem *redo = [[UIBarButtonItem alloc]
+                             initWithTitle:@"redo"
+                             style:UIBarButtonItemStyleBordered
+                             target:self
+                             action:@selector(redoLastUndo)];
+    
+    UIBarButtonItem *undoAllChanges = [[UIBarButtonItem alloc]
+                                       initWithTitle:@"Undo All Changes"
+                                       style:UIBarButtonItemStyleBordered
+                                       target:self
+                                       action:@selector(rollbackAllChanges)];
+    
+    
+    
+    
+    
+    
+    //Centers the bottom tool bar.
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [self setToolbarItems:[NSArray arrayWithObjects:undo,flexibleSpace, saveChanges, flexibleSpace , redo,flexibleSpace, undoAllChanges, nil]];
+    [flexibleSpace release];
+    
+    [self.navigationController setToolbarHidden:NO];
+
+    
 
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    
+     }
+
+-(void)rollbackAllChanges{
+    [[DAO sharedDao]rollbackAllChangesProducts:self.currentCompany];
+    [self.tableView reloadData];
 }
+
+-(void)redoLastUndo{
+    [[DAO sharedDao]redoLastUndoforProductWithCurrentCompany:self.currentCompany];
+   [self.tableView reloadData];
+}
+-(void)undoLastAction{
+    [[DAO sharedDao]undoLastActionProductWithcurrentCompny:self.currentCompany];
+  [self.tableView reloadData]; 
+}
+
+-(void)saveChanges{
+    [[DAO sharedDao]saveChanges];
+}
+
 
 -(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {    //push to the companyeditview controller
@@ -86,10 +142,9 @@
 
 -(void)pushToProductViewEditor{
     
-
-    EditproductViewController *productEdit = [[EditproductViewController alloc]init];
+        EditproductViewController *productEdit = [[EditproductViewController alloc]init];
     productEdit.productsArray = self.currentCompany.products;
-    productEdit.currentCompanyIdentificaion = self.currentCompany.identication;
+    productEdit.currentCompanyIdentificaion = self.currentCompany.id; 
     
     [self.navigationController pushViewController:productEdit animated:YES];
    
@@ -101,6 +156,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
+       
     
      [self.tableView reloadData];
 }
@@ -124,8 +180,16 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.currentCompany.products count];
+    return [self.currentCompany.products count]; 
 }
+//Added to not have empty rows.
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[[UIView alloc] init] autorelease];
+    
+    return view;
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -35,6 +35,8 @@
     self.dao = [DAO sharedDao];
     
     
+    
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
                                   initWithTitle:@"Add"
                                   style:UIBarButtonItemStyleBordered
@@ -43,6 +45,40 @@
     self.navigationItem.leftBarButtonItem = addButton;
     [addButton release];
     
+    
+    UIBarButtonItem *saveChanges = [[UIBarButtonItem alloc]
+                                  initWithTitle:@"Save Changes"
+                                  style:UIBarButtonItemStyleBordered
+                                  target:self
+                                  action:@selector(saveChanges)];
+    UIBarButtonItem *undo = [[UIBarButtonItem alloc]
+                                  initWithTitle:@"Undo"
+                                  style:UIBarButtonItemStyleBordered
+                                  target:self
+                                  action:@selector(undoLastAction)];
+    UIBarButtonItem *redo = [[UIBarButtonItem alloc]
+                             initWithTitle:@"redo"
+                             style:UIBarButtonItemStyleBordered
+                             target:self
+                             action:@selector(redoLastUndo)];
+    
+    UIBarButtonItem *undoAllChanges = [[UIBarButtonItem alloc]
+                            initWithTitle:@"Undo All Changes"
+                            style:UIBarButtonItemStyleBordered
+                            target:self
+                            action:@selector(rollbackAllChanges)];
+    
+
+    
+
+    
+    
+    //Centers the bottom tool bar.
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [self setToolbarItems:[NSArray arrayWithObjects:undo,flexibleSpace, saveChanges, flexibleSpace , redo,flexibleSpace, undoAllChanges, nil]];
+    [flexibleSpace release];
+    
+    [self.navigationController setToolbarHidden:NO];
     
     // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = NO;
@@ -59,6 +95,25 @@
     
     
     
+    
+    
+}
+-(void)rollbackAllChanges{
+    [[DAO sharedDao]rollbackAllChanges];
+    [self.tableView reloadData];
+}
+
+-(void)redoLastUndo{
+    [[DAO sharedDao]redoLastUndo];
+    [self.tableView reloadData];
+}
+-(void)undoLastAction{
+    [[DAO sharedDao]undoLastAction];
+    [self.tableView reloadData];
+}
+
+-(void)saveChanges{
+    [[DAO sharedDao]saveChanges];
     
     
 }
@@ -114,6 +169,7 @@
     [super viewWillAppear:animated];
     [self.tableView reloadData]; // to reload selected cell
     //create a gesture that passes to the editcompanyviewcontroller
+    
     
     [self runNSURLSession];
     
@@ -173,8 +229,16 @@
 {
     // Return the number of rows in the section.
     return [self.dao.companyList count];
+    
 }
 
+//Added to not have empty rows.
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[[UIView alloc] init] autorelease];
+    
+    return view;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -212,7 +276,7 @@
         NSLog(@" The company being deleted is at %ld", (long)Nsint);
         int companyId = (int) Nsint;
         
-     [[DAO sharedDao] deleteCompanyData:[NSString stringWithFormat:@"%d",companyId]];
+     [[DAO sharedDao] deleteCompanyData:companyId];
         
         [self.dao.companyList removeObjectAtIndex:indexPath.row];
         [self.dao.logoList removeObjectAtIndex:indexPath.row];
@@ -250,12 +314,14 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [DAO sharedDao].indexPathRow = indexPath.row;
+    [[DAO sharedDao] setIndexPathRow:indexPath.row];
     
     
     self.productViewController.currentCompany = self.dao.companyList[indexPath.row];
     
     NSLog(@"%@", self.dao.companyList[indexPath.row]);
+    
+    
     
     Company *comp = self.dao.companyList[indexPath.row];
     NSLog(@"Selected Comp Name %@", comp.name);

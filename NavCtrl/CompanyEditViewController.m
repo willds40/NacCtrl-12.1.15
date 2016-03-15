@@ -17,6 +17,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    self.companyEdit.delegate = self;
+    self.companyImageEdit.delegate = self;
+    self.stockSymbolAdd.delegate=self;
+
+    
     if (self.companyName != nil) {
         self.companyEdit.text = self.companyName;
         [self.submitButtonOutlet setHidden:YES];
@@ -58,10 +64,8 @@
 - (IBAction)submitButton:(id)sender {
 
     
-    [[DAO sharedDao] createNewCompany:self.companyEdit.text
-                              andlogo:self.companyImageEdit.text andstockCodes:self.stockSymbolAdd.text];
+    [[DAO sharedDao] createNewCompany:self.companyEdit.text andlogo:self.companyImageEdit.text andstockCodes:self.stockSymbolAdd.text] ;
     
- 
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -75,4 +79,11 @@
 
     
 }
+
+-(BOOL) textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 @end

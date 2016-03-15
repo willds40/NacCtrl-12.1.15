@@ -8,16 +8,22 @@
 
 #import <Foundation/Foundation.h>
 #import "Products.h"
+#import <CoreData/CoreData.h>
 
-@interface Company : NSObject
+
+@interface Company :NSObject
+
+
 @property (strong, nonatomic)NSMutableArray *products;
 @property (strong, nonatomic)NSString * name;
 @property (strong, nonatomic)NSString * logo;
 @property (strong, nonatomic)NSString * stockCodes;
 @property (nonatomic, strong)NSString *stockPrice;
-@property (nonatomic, strong)NSString *identication; 
+@property (nonatomic)int id; 
 
--(instancetype)initWithid:(NSString *)identifcation andName:(NSString *)string andLogo: (NSString *)logo andStockCodes: (NSString *)stockCodes;
+
+
+-(instancetype)initWithName:(NSString *)string andLogo: (NSString *)logo andStockCodes: (NSString *)stockCodes;
 
 
 

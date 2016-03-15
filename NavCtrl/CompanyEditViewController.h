@@ -10,7 +10,7 @@
 #import "DAO.h"
 #import "CompanyViewController.h"
 
-@interface CompanyEditViewController : UIViewController
+@interface CompanyEditViewController : UIViewController <UITextFieldDelegate>
 @property (retain, nonatomic) IBOutlet UITextField *companyEdit;
 @property (retain, nonatomic) IBOutlet UITextField *companyImageEdit;
 @property (retain, nonatomic) IBOutlet UITextField *stockSymbolAdd;
