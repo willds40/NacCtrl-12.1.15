@@ -65,6 +65,8 @@
     //3. Now the context points to the SQLite store
     [[self context] setPersistentStoreCoordinator:psc];
 //    [[self context] setUndoManager:nil];
+    
+    
 }
 // Physical storage location in device.
 -(NSString*) archivePath
@@ -103,6 +105,7 @@
             
             [self.companyList addObject:company];
            [self fetchRequestProducts:company];
+            
         }
     } else {
         NSLog(@"Error fetching data");
@@ -137,7 +140,7 @@
     }
     
     }
-
+    
 }
 -(void)hardCodedValues
     {
@@ -167,7 +170,7 @@
         [windows setValue:@"Windows Mobile Devices" forKey:@"name"];
         [windows setValue:@"windows.png" forKey:@"logo"];
         [windows setValue:@"MSFT" forKey:@"stockSymbol"];
-        [windows setValue:@4 forKey:@"id"];
+        [windows setValue:@3 forKey:@"id"];
 
         //Apple Products
         NSEntityDescription *entityDescription2 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.context];
@@ -177,7 +180,7 @@
         [iphone setValue:@"http://www.apple.com/iphone/?cid=oas-us-domains-iphone.com" forKey:@"url"];
         [iphone setValue:@0 forKey:@"id"];
         [iphone setValue:apple forKey:@"company"];
-        
+        [iphone dealloc];
         
         NSManagedObject *ipad = [[NSManagedObject alloc]initWithEntity:entityDescription2 insertIntoManagedObjectContext:self.context];
         [ipad setValue:@"Ipad" forKey:@"name"];
@@ -279,6 +282,8 @@
 
        [self saveChanges];
         [self fetchRequest];
+        
+        
     }
     
 
@@ -310,9 +315,7 @@
 
 -(void)createNewProductWithCompanyId: (int)currentCompanyIdentificaion andName:(NSString *)name andlogo:(NSString *)logo andUrl: (NSString *)url{
     
-    
-    
-    
+
 self.anotherProduct = [[Products alloc]initWithName:name andlogo:logo andurl:url];
     
 NSEntityDescription *entityProduct = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.context];
@@ -385,7 +388,9 @@ NSEntityDescription *entityProduct = [NSEntityDescription entityForName:@"Produc
             NSLog(@" The delete was succesful");
         }
     
-//    [self saveChanges];
+    
+    [self fetchRequest]; 
+   
 }
 -(void)deleteProductData:(NSString *)productName{
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]initWithEntityName:@"Product"];

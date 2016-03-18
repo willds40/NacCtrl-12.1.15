@@ -8,6 +8,7 @@
 
 #import "NavControllerAppDelegate.h"
 #import "CompanyViewController.h"
+#import "CompanyCollectionViewController.h"
 
 @implementation NavControllerAppDelegate
 
@@ -16,8 +17,8 @@
     
     // Override point for customization after application launch.
     UIViewController *rootController =
-    [[CompanyViewController alloc]
-     initWithNibName:@"CompanyViewController" bundle:nil];
+    [[CompanyCollectionViewController alloc]
+     initWithNibName:@"CompanyCollectionViewController" bundle:nil];
     
     
     _navigationController = [[UINavigationController alloc]
