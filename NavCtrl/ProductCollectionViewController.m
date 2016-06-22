@@ -33,7 +33,7 @@ static NSString * const reuseIdentifier = @"Cell";
     // REGISTER THE NIB FOR THE CELL WITH THE TABLE
     [self.collectionView registerNib:nib forCellWithReuseIdentifier:reuseIdentifier];
     
-    
+    // instead of button - give a good name
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self
                action:@selector(pushToProductViewEditor)

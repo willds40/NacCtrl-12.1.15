@@ -28,7 +28,7 @@ static NSString * const reuseIdentifier = @"Cell";
     self.dao = [DAO sharedDao];
     self.collectionView.delegate = self;
     
-    
+    // what does this do - comment
     self.installsStandardGestureForInteractiveMovement = TRUE;
     
     
@@ -108,6 +108,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [self.collectionView reloadData]; // to reload selected cell
     //create a gesture that passes to the editcompanyviewcontroller
     
+    // update stocks - timer
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(runNSURLSession) userInfo:nil repeats:YES];
     [timer fire]; //the timer will fire once and then will fire every 60 seconds.
     
@@ -260,8 +261,10 @@ static NSString * const reuseIdentifier = @"Cell";
     // Configure the cell
     
    cell.CompanyName.text = [[self.dao.companyList objectAtIndex:[indexPath row]] name];
+    
     cell.CompanyImage.image = [UIImage imageNamed:[[self.dao.companyList objectAtIndex:[indexPath row]]logo]];
     cell.StockSymbol.text =[[self.dao.companyList objectAtIndex:[indexPath row]] stockPrice];
+    
     if (self.editing == true) {
         cell.DeleteButton.hidden = false;
     }else{
@@ -310,6 +313,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     
     self.productCollectionViewController= [[ProductCollectionViewController alloc]initWithNibName:@"ProductCollectionViewController" bundle:nil];
+    
     self.productCollectionViewController.currentCompany = self.dao.companyList[indexPath.row];
     
     NSLog(@"%@", self.dao.companyList[indexPath.row]);

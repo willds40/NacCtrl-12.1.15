@@ -23,11 +23,11 @@
     self.stockSymbolAdd.delegate=self;
 
     
-    if (self.companyName != nil) {
+    if (self.companyName != nil) { // if in edit mode
         self.companyEdit.text = self.companyName;
         [self.submitButtonOutlet setHidden:YES];
             }
-    else{
+    else{ // insert mode
         [self.saveButtonOutlet setHidden:YES]; 
     
     }
